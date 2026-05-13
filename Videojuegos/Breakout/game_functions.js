@@ -2,24 +2,17 @@
  * Collection of functions that will be used in the games
  *
  * Aixa Elenka Mendoza Filisola
- * 2026-02-10
+ * 2026-05-13 
  */
 
 "use strict";
 
 /*
- * Detect a collision of two box colliders
- *
- * Arguments:
- * - obj1: An instance of the Rect class with properties x, y, width, height
- * - obj2: An instance of the Rect class with properties x, y, width, height
- *
- * Returns:
- * - true if the boxes overlap, false otherwise
+ * Detect a collision of two box colliders accepting two arguments.
+These areguments are instances of the RECT class with propoerties like width and height.
+It returns true if the boxes ocerlap
  */
 function boxOverlap(obj1, obj2) {
-    // Declare legible names for the borders
-    // TODO: define variables
     const L1 = obj1.collider.x;
     const R1 = obj1.collider.x + obj1.collider.width;
     const T1 = obj1.collider.y;
@@ -31,22 +24,13 @@ function boxOverlap(obj1, obj2) {
     const B2 = obj2.collider.y + obj2.collider.height;
 
     // Compare the values to determine if the boxes overlap
-    // TODO: use the correct condition
     return L1 <= R2 && L2 <= R1 && T1 <= B2 && T2 <= B1;
 }
 
 /*
- * Generate a random integer in the range [start, start + size - 1]
- *
- * Arguments:
- * - size: The size of the range (number of possible values)
- * - start: The starting value of the range (default is 0)
- *
- * Returns:
- * - A random integer in the specified range
+ * Generates a random integer in the range [start, start + size - 1] using the size and start as arguments and returning a random integer.
 */
 function randomRange(size, start) {
     return Math.floor(Math.random() * size) + ((start === undefined) ? 0 : start);
 }
 
-//export { boxOverlap, randomRange };

@@ -1,10 +1,9 @@
 /*
- * Class for a rectangle, described as top left coordinate position,
- * width and height.
+ * Class for a rectangle, described as top left coordinate position, width and height.
  * Used for sprites.
  *
- * Aixa Elenka Mendoza Filisola
- * 2026-02-10 (Fecha)
+ *  Aixa Elenka Mendoza Filisola
+ * 2026-05-13 
  */
 
 "use strict";

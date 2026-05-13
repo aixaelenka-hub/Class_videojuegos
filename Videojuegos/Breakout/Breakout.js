@@ -16,23 +16,23 @@ let oldTime = 0;
 
 // Global variables for the settings of the game
 let initialSpeed = 0.5;
-let ballSpeed = 0.5;
-let paddleSpeed = 0.5;
-let speedIncrease = 1.002; //how much the speed of the ball increases
+let fireflySpeed = 0.5;
+let mainleafSpeed = 0.5;
+let speedIncrease = 1.002; //how much the speed of the firefly  increases
 
-// Class for the ball in the game
-class Ball extends GameObject {
+// Class for the firefly in the game
+class Firefly extends GameObject {
     constructor(position, width, height, color, sheetCols) {
-        super(position, width, height, color, "ball", sheetCols);
-        this.velocity = new Vector(0, 0); //ball starts not moving
+        super(position, width, height, color, "firefly", sheetCols);
+        this.velocity = new Vector(0, 0); //firefly starts not moving
     }
     //delta time is time between frames
     update(deltaTime) {
-        this.position = this.position.plus(this.velocity.times(ballSpeed).times(deltaTime));
+        this.position = this.position.plus(this.velocity.times(fireflySpeed).times(deltaTime));
         this.updateCollider();
     }
 
-    // Move the ball to the center, and stop its motion
+    // Move the firefly to the center, and stop its motion
     reset() {
         this.position.x = canvasWidth / 2;
         this.position.y = canvasHeight / 2;
@@ -40,7 +40,7 @@ class Ball extends GameObject {
         this.velocity.y = 0;
     }
 
-    // Start the ball motion, random angle between -45 degrees to 45 degrees
+    // Start the firefly motion, random angle between -45 degrees to 45 degrees
     serve() {
         let angle = Math.random() * Math.PI / 2 - Math.PI / 4;
         // Convets the angle into a vector, and scale it by the speed
@@ -48,7 +48,7 @@ class Ball extends GameObject {
         if (Math.abs (this.velocity.y)<0.3) {
             this.velocity.y = 0.3 * Math.sign (this.velocity.y || 1);
         }
-        ballSpeed = initialSpeed;
+        fireflySpeed = initialSpeed;
 
         // Select a random direction
         if (Math.random() > 0.5) {
@@ -90,7 +90,7 @@ class Paddle extends GameObject {
             this.velocity[axis] += sign;
         }
         // Normalize the velocity to avoid greater speed on diagonals
-        this.velocity = this.velocity.normalize().times(paddleSpeed);
+        this.velocity = this.velocity.normalize().times(mainleafSpeed);
 
         this.position = this.position.plus(this.velocity.times(deltaTime));
 
@@ -105,7 +105,7 @@ class Paddle extends GameObject {
         if (this.position.y - this.halfSize.y < 0) {
             this.position.y = this.halfSize.y;
         }
-        // Bottom border
+        // Bottom border / light
         if (this.position.y + this.halfSize.y > canvasHeight) {
             this.position.y = canvasHeight - this.halfSize.y;
         }
@@ -119,11 +119,11 @@ class Paddle extends GameObject {
         }
     }
 }
-//Class to create the bricks at the top of the screen for the character to destroy
-//includes the method to draw the objtect and recognize when it's been destroyed 
-class Brick extends GameObject {
+//Class to create the bricks / leaves at the top of the screen for the character to destroy
+//includes the method to draw the object and recognize when it's been destroyed 
+class Leaves extends GameObject {
     constructor (position, width, height, color) {
-        super (position, width, height, color, "brick")
+        super (position, width, height, color, "leaves")
         this.active = true;
     }
     destroy () {
@@ -153,7 +153,7 @@ class Game {
 
         //starting variables
         this.level = 1;
-        this.bricksDestroyed = 0;
+        this.leavesDestroyed = 0;
         this.livesCounter = 100;
 
         this.initObjects();
@@ -178,7 +178,7 @@ class Game {
         this.timeLabel = new TextLabel (20,canvasHeight -20, "25px Arial", "#ffe9a8");
 
         //label for brick counter (how many bricks/leaves have been destroyed)
-        this.bricksLabel = new TextLabel (canvasWidth -250, canvasHeight -20, "25px Arial", "#ffe9a8");
+        this.leavesLabel = new TextLabel (canvasWidth -250, canvasHeight -20, "25px Arial", "#ffe9a8");
         
     }
 
@@ -186,21 +186,21 @@ class Game {
     initObjects() {
 
         //Resets the counter of bricks/leaves destroyed
-        this.bricksDestroyed = 0;
+        this.leavesDestroyed = 0;
     
-        // Sprites for paddle and ball
-        this.paddle = new Paddle(new Vector(canvasWidth/2, canvasHeight/1.2), 120, 20, "green");
-        this.paddle.setSprite ("hoja.png")
-        // The ball
-        this.ball = new Ball(new Vector(canvasWidth / 2, canvasHeight / 2), 40, 40, "black");
-        this.ball.setCollider (18,18);
-        this.ball.setSprite ("luciernaga.png");
+        // Sprites for paddle and firefly
+        this.mainleaf = new Paddle(new Vector(canvasWidth/2, canvasHeight/1.2), 120, 20, "green");
+        this.mainleaf.setSprite ("leaf.png")
+        // The firefly
+        this.firefly = new Firefly(new Vector(canvasWidth / 2, canvasHeight / 2), 40, 40, "black");
+        this.firefly.setCollider (18,18);
+        this.firefly.setSprite ("firefly.png");
 
 
 
         // The walls around the permiter
         this.wallTop = new Paddle(new Vector(canvasWidth / 2, 0), canvasWidth, 20, "#0c0b1c");
-        this.wallBottom = new Paddle(new Vector(canvasWidth / 2, canvasHeight), canvasWidth, 20, "#ffe9a8");
+        this.wallBottomLight = new Paddle(new Vector(canvasWidth / 2, canvasHeight), canvasWidth, 20, "#ffe9a8");
         this.wallLeft = new Paddle(new Vector(0, canvasHeight / 2), 20, canvasHeight, "#0c0b1c");
         this.wallRight = new Paddle(new Vector(canvasWidth, canvasHeight / 2), 20, canvasHeight, "#0c0b1c");
 
@@ -209,37 +209,37 @@ class Game {
             this.wallLeft,
             this.wallRight,
             this.wallTop,
-            this.wallBottom,
-            this.paddle,
-            this.ball
+            this.wallBottomLight,
+            this.mainleaf,
+            this.firefly
         ];
 
-        //Bricks configuration
-        //Array that stores every brick
-        this.bricks = [];
+        //Leaves configuration
+        //Array that stores every leaf
+        this.leaves = [];
         //Determines the number of rows based on the level being played
         let rows = 3 + (this.level -1);
-        //every row has 8 bricks
+        //every row has 8 leaves/bricks
         let cols = 8;
-        //size of bricks, spacing (so the bricks don't overlap) and where the first row starts vertically
-        let brickWidth = 80;
-        let brickHeight = 20;
+        //size of bricks/leaves, spacing (so the bricks / leaves don't overlap) and where the first row starts vertically
+        let leavesWidth = 80;
+        let leavesHeight = 20;
         let spacing = 10;
         let startY = 60;
-        let totalWidth = cols * brickWidth + (cols -1) * spacing;
+        let totalWidth = cols * leavesWidth + (cols -1) * spacing;
         let startX = (canvasWidth - totalWidth)/2;
 
-        //loop yo create rows and columns of bricks, like a grid
-        //it also implements the sprite for each brick
+        //loop yo create rows and columns of bricks/leaves, like a grid
+        //it also implements the sprite for each brick/leaves
         for (let row = 0; row < rows;row++ ) {
             for (let col = 0; col <cols ; col++) {
-                let x = startX + brickWidth / 2 + col * (brickWidth + spacing);
-                let y = startY + row * (brickHeight + spacing);
-                let brick = new Brick ( new Vector (x, y), brickWidth, brickHeight, "green");
-                brick.setSprite ("hoja.png")
-                //pushes the bricks into the array
-                this.bricks.push (brick);
-                this.actors.push (brick);
+                let x = startX + leavesWidth / 2 + col * (leavesWidth + spacing);
+                let y = startY + row * (leavesHeight + spacing);
+                let leaf = new Leaves ( new Vector (x, y), leavesWidth, leavesHeight, "green");
+                leaf.setSprite ("leaf.png")
+                //pushes the bricks/leaves into the array
+                this.leaves.push (leaf);
+                this.actors.push (leaf);
             }
         }
 
@@ -255,7 +255,7 @@ class Game {
         this.levelLabel.draw (ctx, "Level " + this.level);
         let seconds = Math.ceil(this.timeRemaining / 1000);
         this.timeLabel.draw(ctx, "Time before sunrise (s): " + seconds);
-        this.bricksLabel.draw ( ctx, "Leaves eaten: " + this.bricksDestroyed);
+        this.leavesLabel.draw ( ctx, "Leaves eaten: " + this.leavesDestroyed);
 
         for (let actor of this.actors) {
             actor.draw(ctx);
@@ -300,52 +300,52 @@ class Game {
         }
     
 
-        // Move the paddles
-        this.paddle.update(deltaTime);
-        // Move the ball
-        this.ball.update(deltaTime);
+        // Move the mainleaf
+        this.mainleaf.update(deltaTime);
+        // Move the fireflyf
+        this.firefly.update(deltaTime);
 
-        // Detect collisions with the paddles
-        if (boxOverlap(this.paddle, this.ball)) {
-            this.ball.position.y = this.paddle.position.y -this.paddle.halfSize.y -this.ball.halfSize.y;
-            this.ball.velocity.y *= -1;
+        // Detect collisions with the mainleaf
+        if (boxOverlap(this.mainleaf, this.firefly)) {
+            this.firefly.position.y = this.mainleaf.position.y -this.mainleaf.halfSize.y -this.firefly.halfSize.y;
+            this.firefly.velocity.y *= -1;
             
 
-            // Incremente the speed of the ball
-            ballSpeed *= speedIncrease;
+            // Incremente the speed of the firefly
+            fireflySpeed *= speedIncrease;
         }
         // Detect collisions with the walls
-        if (boxOverlap(this.wallTop, this.ball)) {
-            this.ball.velocity.y *= -1;
+        if (boxOverlap(this.wallTop, this.firefly)) {
+            this.firefly.velocity.y *= -1;
         }
-        if (boxOverlap (this.wallRight, this.ball)|| boxOverlap(this.wallLeft, this.ball))
+        if (boxOverlap (this.wallRight, this.firefly)|| boxOverlap(this.wallLeft, this.firefly))
             {
-            this.ball.velocity.x *= -1;
+            this.firefly.velocity.x *= -1;
         }
         // Detect collisions with the light/bottom wall
-        if (boxOverlap(this.wallBottom, this.ball)) {
+        if (boxOverlap(this.wallBottomLight, this.firefly)) {
             this.livesCounter -= 1;
-            this.ball.reset();
+            this.firefly.reset();
             this.inPlay = false;
             if (this.livesCounter <= 0) {
                 this.livesCounter = 0;
                 this.gameOver = true;
             }
         }
-        //Detect colisions with the bricks
-        for (let brick of this.bricks) {
-            if (brick.active && boxOverlap (brick, this.ball)) {
-                brick.destroy();
-                this.bricksDestroyed += 1;
-                this.ball.velocity.y *= -1;
-                ballSpeed *= speedIncrease;
+        //Detect colisions with the bricks/leaves
+        for (let leaf of this.leaves) {
+            if (leaf.active && boxOverlap (leaf, this.firefly)) {
+                leaf.destroy();
+                this.leavesDestroyed += 1;
+                this.firefly.velocity.y *= -1;
+                fireflySpeed *= speedIncrease;
                 break;
             }
         }
         let allDestroyed = true;
         //checks if all bricks have been destroyed during the game
-        for (let brick of this.bricks) {
-            if (brick.active) {
+        for (let leaves of this.leaves) {
+            if (leaves.active) {
             allDestroyed = false;
             break;
         }
@@ -355,7 +355,7 @@ class Game {
 
             this.inPlay = false;
 
-            this.ball.reset();
+            this.firefly.reset();
 
             this.levelFinished = true;
 
@@ -366,7 +366,7 @@ class Game {
                 }
                 else {
                  this.level += 1; 
-                 this.bricksDestroyed = 0;
+                 this.leavesDestroyed = 0;
                  this.levelFinished = false;
                  this.initObjects();
                 }
@@ -376,19 +376,19 @@ class Game {
     }
 
     createEventListeners() {
-        //Keys to control the paddle
+        //Keys to control the mainleaf
         window.addEventListener('keydown', (event) => {
             if (event.key == 'ArrowLeft') {
-                this.addKey('left', this.paddle);
+                this.addKey('left', this.mainleaf);
             } if (event.key == 'ArrowRight') {
-                this.addKey('right', this.paddle);
+                this.addKey('right', this.mainleaf);
             }
 
-            // Get the ball in play
+            // Get the firefly in play
             if (event.key == ' ') {
                 // Only if it is not alreay moving
                 if (!this.inPlay && !this.gameOver) {
-                    this.ball.serve();
+                    this.firefly.serve();
                     this.inPlay = true;
                 }
             }
@@ -396,9 +396,9 @@ class Game {
 
         window.addEventListener('keyup', (event) => {
             if (event.key == 'ArrowLeft') {
-                this.delKey('left', this.paddle);
+                this.delKey('left', this.mainleaf);
             } if (event.key == 'ArrowRight') {
-                this.delKey('right', this.paddle);}
+                this.delKey('right', this.mainleaf);}
         });
     }
 

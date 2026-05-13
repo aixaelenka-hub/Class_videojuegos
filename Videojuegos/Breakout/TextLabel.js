@@ -1,8 +1,8 @@
 /*
- * Class to draw text at specific positions within the game canvas  (Description)
+ * Class to draw text at specific positions within the game canvas 
  *
- * Aixa Elenka Mendoza Filisola
- * 2026-02-10 (Fecha)
+ *  Aixa Elenka Mendoza Filisola
+ * 2026-05-13 
  */
 
 "use strict";
@@ -23,6 +23,4 @@ class TextLabel {
     }
 }
 
-/* to centeer or change the aligment of the text:
-ctx.textAlign = "center";
-ctx.textAlign = "center";*/
+

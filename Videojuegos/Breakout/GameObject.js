@@ -1,16 +1,14 @@
 /*
- * Class for the base Game Object used for all the actors in a scene
+ * Class for the base Game Object used for all the actors in a scene.
  *
- * The position of the object is its center.
  *
- * Aixa Elenka Mendoza Filisola
- * 2026-02-15 (date)
+ *  Aixa Elenka Mendoza Filisola
+ * 2026-05-13 
  */
+
 
 "use strict";
 
-//import { Vector } from "./Vector.js";
-//import { Rect } from "./Rect.js";
 
 // Global variables to select whether to display bounding boxes and colliders
 let showBBox = false;
@@ -23,7 +21,7 @@ window.addEventListener('keydown', event => {
 });
 
 
-
+//
 class GameObject {
     constructor(position, width, height, color, type) {
         this.position = position;
