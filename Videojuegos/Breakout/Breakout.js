@@ -145,6 +145,7 @@ class Game {
         //background image file:
         this.background = new Image();
         this.background.src = "background.png";
+        this.bounceSound = new Audio("bounce.wav");
 
         //game states:
         this.gameOver = false;
@@ -307,6 +308,7 @@ class Game {
 
         // Detect collisions with the mainleaf
         if (boxOverlap(this.mainleaf, this.firefly)) {
+            this.bounceSound.cloneNode().play();
             this.firefly.position.y = this.mainleaf.position.y -this.mainleaf.halfSize.y -this.firefly.halfSize.y;
             this.firefly.velocity.y *= -1;
             
@@ -335,6 +337,7 @@ class Game {
         //Detect colisions with the bricks/leaves
         for (let leaf of this.leaves) {
             if (leaf.active && boxOverlap (leaf, this.firefly)) {
+                this.bounceSound.cloneNode().play();
                 leaf.destroy();
                 this.leavesDestroyed += 1;
                 this.firefly.velocity.y *= -1;
