@@ -7,5 +7,5 @@ Unfortunately the firefly has no stamina left so you need to help it bounce to i
 
 Remember that fireflies are sensitive to light. So everytime it makes contact with the light at the bottom of the screen (bottom wall marked in cream) the firefly will reset to its original position and lose a life. You need to complete all levels before the sunrise as the sunlight will directly kill the firefly. This is the time limit shown at the bottom of the screen.
 
-To start the game or run click the space key in your keyboard, the firefly will move in a random direction. 
+To start the game or run click the space key in your keyboard after the title screen clears, the firefly will move in a random direction from it's initial position in the center of the screen.
 Good luck :)

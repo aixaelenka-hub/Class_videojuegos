@@ -18,7 +18,7 @@ let oldTime = 0;
 let initialSpeed = 0.5;
 let fireflySpeed = 0.5;
 let mainleafSpeed = 0.5;
-let speedIncrease = 1.002; //how much the speed of the firefly  increases
+let speedIncrease = 1.002; //how much the speed of the firefly increases
 
 // Class for the firefly in the game
 class Firefly extends GameObject {
@@ -155,7 +155,7 @@ class Game {
         //starting variables
         this.level = 1;
         this.leavesDestroyed = 0;
-        this.livesCounter = 100;
+        this.livesCounter = 3;
 
         this.initObjects();
 
@@ -312,23 +312,30 @@ class Game {
             this.firefly.position.y = this.mainleaf.position.y -this.mainleaf.halfSize.y -this.firefly.halfSize.y;
             this.firefly.velocity.y *= -1;
             
+            
 
             // Incremente the speed of the firefly
             fireflySpeed *= speedIncrease;
+            if (fireflySpeed > 1.5) {
+                fireflySpeed = 1.5; }
+            
         }
         // Detect collisions with the walls
         if (boxOverlap(this.wallTop, this.firefly)) {
             this.firefly.position.y = this.wallTop.position.y +this.wallTop.halfSize.y + this.firefly.halfSize.y;
             this.firefly.velocity.y *= -1;
+            
         }
         if (boxOverlap (this.wallRight, this.firefly)) {
             this.firefly.position.x = this.wallRight.position.x - this.wallRight.halfSize.x - this.firefly.halfSize.x;
             this.firefly.velocity.x *= -1;
+            
         }
 
         if (boxOverlap (this.wallLeft, this.firefly)) {
             this.firefly.position.x = this.wallLeft.position.x +this.wallLeft.halfSize.x + this.firefly.halfSize.x;
             this.firefly.velocity.x *= -1;
+            
         }
        
         if (boxOverlap(this.wallBottomLight, this.firefly)) {
@@ -340,17 +347,18 @@ class Game {
                 this.gameOver = true;
             }
         }
-        //Detect colisions with the bricks/leaves
-        for (let leaf of this.leaves) {
-            if (leaf.active && boxOverlap (leaf, this.firefly)) {
-                this.bounceSound.cloneNode().play();
-                leaf.destroy();
-                this.leavesDestroyed += 1;
-                this.firefly.velocity.y *= -1;
-                fireflySpeed *= speedIncrease;
-                break;
+        //Detect colisions with the bricks/leaves 
+        for (let leaf of this.leaves) { 
+            if (leaf.active && boxOverlap (leaf, this.firefly)) { 
+                this.bounceSound.cloneNode().play(); 
+                leaf.destroy(); 
+                this.leavesDestroyed += 1; 
+                this.firefly.velocity.y *= -1; 
+                fireflySpeed *= speedIncrease; 
+                break; } 
             }
-        }
+            
+        
         let allDestroyed = true;
         //checks if all bricks have been destroyed during the game
         for (let leaves of this.leaves) {
