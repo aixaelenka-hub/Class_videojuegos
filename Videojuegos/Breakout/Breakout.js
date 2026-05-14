@@ -318,13 +318,19 @@ class Game {
         }
         // Detect collisions with the walls
         if (boxOverlap(this.wallTop, this.firefly)) {
+            this.firefly.position.y = this.wallTop.position.y +this.wallTop.halfSize.y + this.firefly.halfSize.y;
             this.firefly.velocity.y *= -1;
         }
-        if (boxOverlap (this.wallRight, this.firefly)|| boxOverlap(this.wallLeft, this.firefly))
-            {
+        if (boxOverlap (this.wallRight, this.firefly)) {
+            this.firefly.position.x = this.wallRight.position.x - this.wallRight.halfSize.x - this.firefly.halfSize.x;
             this.firefly.velocity.x *= -1;
         }
-        // Detect collisions with the light/bottom wall
+
+        if (boxOverlap (this.wallLeft, this.firefly)) {
+            this.firefly.position.x = this.wallLeft.position.x +this.wallLeft.halfSize.x + this.firefly.halfSize.x;
+            this.firefly.velocity.x *= -1;
+        }
+       
         if (boxOverlap(this.wallBottomLight, this.firefly)) {
             this.livesCounter -= 1;
             this.firefly.reset();

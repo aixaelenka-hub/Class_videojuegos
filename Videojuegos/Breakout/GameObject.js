@@ -21,7 +21,8 @@ window.addEventListener('keydown', event => {
 });
 
 
-//
+//Base class for every object
+//handles positions, size, sprites, scaling, colliders, etc
 class GameObject {
     constructor(position, width, height, color, type) {
         this.position = position;
@@ -51,11 +52,8 @@ class GameObject {
     setScale(scale) {
         this.scale = scale;
     }
-
+    //creates the collider used for collision detection
     setCollider(width, height) {
-        // The top left corner of the collider is offset by half of its size
-        // TODO: Provide the correct values for the collider rectangle
-        // Use the scale as well
         this.xOffset = width / 2;
         this.yOffset = height / 2;
         this.colliderWidth = width;
@@ -64,15 +62,15 @@ class GameObject {
     }
 
     updateCollider() {
-        // Adjust the Rect of the object with its position
-        // TODO: Center the collider around the object position
-        // Use the scale as well
+        // Adjust the Rect of the object with its position, updates the colliders position to match the objects position
+
         this.collider = new Rect(this.position.x - this.xOffset,
                                  this.position.y - this.yOffset,
                                  this.colliderWidth,
                                  this.colliderHeight);
     }
 
+    //method to draw an object with or without sprites
     draw(ctx) {
         if (this.spriteImage) {
             if (this.spriteRect) {
@@ -107,10 +105,10 @@ class GameObject {
         if (showColl) this.drawCollider(ctx);
     }
 
+    //draws the visual bound box for scaling
     drawBoundingBox(ctx) {
-        // Attempt to compose the overlay so it makes the image lighter
         ctx.globalCompositeOperation = "screen";
-        // A transparent layer on top
+        
         ctx.fillStyle = "rgb(0.5, 0.5, 0.5, 0.3)";
         ctx.fillRect((this.position.x - this.halfSize.x * this.scale),
                      (this.position.y - this.halfSize.y * this.scale),
@@ -132,7 +130,7 @@ class GameObject {
         ctx.fillStyle = "red";
         ctx.fillRect(this.position.x - 2, this.position.y - 2, 4, 4);
     }
-
+    //Draws the collider rec used for collisions
     drawCollider(ctx) {
         ctx.strokeStyle = "white";
         ctx.beginPath();
